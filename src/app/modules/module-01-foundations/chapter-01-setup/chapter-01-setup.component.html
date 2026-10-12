@@ -1,0 +1,117 @@
+<main class="chapter-shell">
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">ERUDITE ANGULAR WEB APPLICATION</p>
+      <h1>Chapter 1: Project Setup & Foundations</h1>
+      <p class="hero-lead">Explore three interactive examples. They demonstrate how an Angular component connects data, page structure, actions and visual styling.</p>
+      <div class="hero-tags">
+        <span>TypeScript = decisions</span>
+        <span>HTML = structure</span>
+        <span>SCSS = appearance</span>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+      <div class="angular-mark"><span>A</span></div>
+      <div class="art-label">BUILD · LEARN · REPEAT</div>
+    </div>
+  </header>
+
+  <section class="analogy-card">
+    <div class="analogy-icon" aria-hidden="true">🏗️</div>
+    <div>
+      <h2>The house analogy</h2>
+      <p>The TypeScript file is the room's control panel, HTML is the layout, and SCSS is the paint and furniture style. Angular joins these three files into one feature.</p>
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 1 · DISPLAY + UPDATE</p>
+    <h2>A welcome panel</h2>
+    <p>Like a name badge: type a new name and apply it to update the displayed greeting.</p>
+  </section>
+  <section class="demo-card">
+    <div class="demo-number">01</div>
+    <div class="demo-content">
+      <div class="welcome-preview">
+        <div class="avatar" aria-hidden="true">{{ learnerName.slice(0, 1).toUpperCase() }}</div>
+        <div><p class="muted-label">WELCOME BACK</p><h3>{{ learnerName }}</h3><p>{{ learnerGoal }}</p></div>
+      </div>
+      <div class="field-row">
+        <label for="learner-name">Display name
+          <input id="learner-name" type="text" [value]="nameDraft" (input)="onNameDraftChange($event)" placeholder="Enter a name" />
+        </label>
+        <button type="button" class="primary-button" (click)="applyLearnerName()">Update greeting</button>
+      </div>
+      <p class="hint">Try a new name, spaces only, and a very long name. Notice the difference between draft text and the applied name.</p>
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 2 · COLLECTION + DERIVED STATE</p>
+    <h2>A setup checklist</h2>
+    <p>Like a paper checklist. Tick items and the progress indicator recalculates from the list.</p>
+  </section>
+  <section class="demo-card">
+    <div class="demo-number">02</div>
+    <div class="demo-content">
+      <div class="progress-summary">
+        <div><p class="muted-label">INTERACTIVE DEMO — NOT A REAL COMPUTER CHECK</p><h3>{{ completedCount }} of {{ setupChecks.length }} items marked ready</h3></div>
+        <strong class="percent">{{ setupPercent }}%</strong>
+      </div>
+      <div class="progress-track" role="progressbar" aria-label="Demo checklist progress" [attr.aria-valuenow]="setupPercent" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-fill" [style.width.%]="setupPercent"></div>
+      </div>
+      <ul class="check-list">
+        @for (check of setupChecks; track check.id) {
+          <li class="check-row" [class.is-complete]="check.complete">
+            <div class="check-symbol" aria-hidden="true">{{ check.complete ? '✓' : '○' }}</div>
+            <div class="check-copy"><h4>{{ check.title }}</h4><p>{{ check.description }}</p></div>
+            <button type="button" class="quiet-button" (click)="toggleSetupCheck(check.id)">{{ check.complete ? 'Mark not ready' : 'Mark ready' }}</button>
+          </li>
+        }
+      </ul>
+      <p class="hint">This checklist is a teaching example. It does not read software installed on your machine; use terminal commands for real checks.</p>
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 3 · WORKFLOW STATE</p>
+    <h2>A task status board</h2>
+    <p>Like a support ticket: the chosen state controls its label, message and color.</p>
+  </section>
+  <section class="demo-card">
+    <div class="demo-number">03</div>
+    <div class="demo-content">
+      <div class="task-topline">
+        <div><p class="muted-label">TASK · ERUDITE-001</p><h3>Prepare the Angular workspace</h3></div>
+        <span class="status-pill"
+          [class.status-not-started]="currentStatus === 'not-started'"
+          [class.status-in-progress]="currentStatus === 'in-progress'"
+          [class.status-blocked]="currentStatus === 'blocked'"
+          [class.status-done]="currentStatus === 'done'">{{ statusLabel }}</span>
+      </div>
+      <div class="status-actions">
+        <button type="button" class="status-button" [attr.aria-pressed]="currentStatus === 'not-started'" (click)="setStatus('not-started')">Not started</button>
+        <button type="button" class="status-button" [attr.aria-pressed]="currentStatus === 'in-progress'" (click)="setStatus('in-progress')">In progress</button>
+        <button type="button" class="status-button" [attr.aria-pressed]="currentStatus === 'blocked'" (click)="setStatus('blocked')">Blocked</button>
+        <button type="button" class="status-button" [attr.aria-pressed]="currentStatus === 'done'" (click)="setStatus('done')">Done</button>
+      </div>
+      @if (currentStatus === 'blocked') {
+        <p class="state-message warning">This task needs attention before it can continue.</p>
+      } @else if (currentStatus === 'done') {
+        <p class="state-message success">This task is complete. You can move to the next lesson.</p>
+      } @else if (currentStatus === 'in-progress') {
+        <p class="state-message active">The task is underway. Continue through the steps.</p>
+      } @else {
+        <p class="state-message">This task has not started yet.</p>
+      }
+      <p class="hint">This is a UI workflow demonstration. A real backend must enforce its own transition rules.</p>
+    </div>
+  </section>
+
+  <footer class="chapter-footer">
+    <div><p class="eyebrow">LATEST ACTION</p><p class="last-action" aria-live="polite">{{ lastAction }}</p></div>
+    <button type="button" class="reset-button" (click)="resetDemo()">Reset all examples</button>
+  </footer>
+</main>
