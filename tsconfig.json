@@ -19,6 +19,7 @@
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
+    "ignoreDeprecations": "6.0",
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
