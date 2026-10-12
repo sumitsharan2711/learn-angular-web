@@ -1,0 +1,156 @@
+<main class="chapter-shell">
+  <header class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">ERUDITE ANGULAR WEB APPLICATION · MODULE 01</p>
+      <h1>Chapter 2: Components in Depth</h1>
+      <p class="hero-lead">
+        Think of a component as a reusable building block. Learn what identifies it,
+        what it controls, and how a page can combine many small blocks into one experience.
+      </p>
+      <div class="hero-tags">
+        <span>Identity</span><span>Reusable patterns</span><span>Component state</span>
+      </div>
+    </div>
+    <div class="component-art" aria-hidden="true">
+      <div class="art-window">
+        <div class="art-top"><i></i><i></i><i></i></div>
+        <div class="art-line wide"></div><div class="art-line"></div>
+        <div class="art-grid"><b></b><b></b><b></b></div>
+      </div>
+      <div class="art-chip chip-one">TS</div><div class="art-chip chip-two">HTML</div><div class="art-chip chip-three">SCSS</div>
+    </div>
+  </header>
+
+  <section class="analogy-card">
+    <div class="analogy-icon" aria-hidden="true">🧱</div>
+    <div>
+      <h2>The building-block analogy</h2>
+      <p>
+        A component is like a standardized brick or a furniture module. It has a
+        name, a job, and a visual shape. You can reuse many copies with different
+        data instead of rebuilding the same thing on every screen.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 1 · COMPONENT IDENTITY</p>
+    <h2>Explore a component blueprint</h2>
+    <p>Change the title or selector preview and open the blueprint. A selector is the name Angular uses to match a component in a template.</p>
+  </section>
+  <section class="panel blueprint-panel">
+    <div class="panel-topline">
+      <div class="scenario-number">01</div>
+      <div class="panel-title"><h3>Component identity explorer</h3><p>One component class, one selector, a template, and a style sheet.</p></div>
+      <button type="button" class="secondary-button" (click)="toggleBlueprint()">{{ showBlueprint ? 'Hide blueprint' : 'Show blueprint' }}</button>
+    </div>
+    <div class="blueprint-form">
+      <label>Example title
+        <input [value]="componentTitle" (input)="updateComponentTitle($event)" />
+      </label>
+      <label>Selector preview
+        <input [value]="selectorName" (input)="updateSelector($event)" spellcheck="false" />
+      </label>
+    </div>
+    <div class="preview-component">
+      <div class="preview-icon">C</div>
+      <div><p class="muted-label">COMPONENT PREVIEW</p><h3>{{ componentTitle || 'Untitled component' }}</h3><p>{{ componentPurpose }}</p></div>
+    </div>
+    @if (showBlueprint) {
+      <div class="blueprint-grid">
+        <article><span class="file-icon ts-icon">TS</span><h4>TypeScript</h4><p>Stores values and methods: what the component knows and does.</p></article>
+        <article><span class="file-icon html-icon">HTML</span><h4>Template</h4><p>Describes the content and controls the user sees.</p></article>
+        <article><span class="file-icon scss-icon">CSS</span><h4>SCSS</h4><p>Defines the visual rules for this component.</p></article>
+      </div>
+    }
+    <div class="selector-example"><span class="code-label">SELECTOR PREVIEW</span><code>&lt;{{ selectorName || 'app-component' }} /&gt;</code></div>
+    <p class="hint">The selector preview is explanatory text; editing it here does not rename this real running component.</p>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 2 · REUSE A VISUAL PATTERN</p>
+    <h2>Render many cards from data</h2>
+    <p>Instead of writing four card layouts by hand, one template pattern can show four different records. This is the basic idea behind reuse.</p>
+  </section>
+  <section class="panel">
+    <div class="metrics-row">
+      <div class="metric"><span>Total records</span><strong>{{ cards.length }}</strong></div>
+      <div class="metric"><span>Approved</span><strong>{{ approvedCount }}</strong></div>
+      <div class="metric"><span>Average progress</span><strong>{{ averageProgress }}%</strong></div>
+    </div>
+    <div class="filter-row">
+      <label>Filter category
+        <select [value]="categoryFilter" (change)="chooseCategory($event)">
+          <option value="All">All categories</option>
+          <option value="People">People</option>
+          <option value="Inventory">Inventory</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </label>
+      <div class="density-switch" aria-label="Card density">
+        <button type="button" [class.is-selected]="cardDensity === 'comfortable'" [attr.aria-pressed]="cardDensity === 'comfortable'" (click)="setDensity('comfortable')">Comfortable</button>
+        <button type="button" [class.is-selected]="cardDensity === 'compact'" [attr.aria-pressed]="cardDensity === 'compact'" (click)="setDensity('compact')">Compact</button>
+      </div>
+    </div>
+    <div class="card-grid" [class.compact-grid]="cardDensity === 'compact'">
+      @for (card of visibleCards; track card.id) {
+        <button type="button" class="record-card" [class.is-selected]="selectedCardId === card.id" (click)="selectCard(card.id)" [attr.aria-pressed]="selectedCardId === card.id">
+          <div class="record-head"><span class="category-tag" [class.finance-tag]="card.category === 'Finance'" [class.people-tag]="card.category === 'People'">{{ card.category }}</span><span class="small-id">#{{ card.id }}</span></div>
+          <h3>{{ card.title }}</h3>
+          <p class="record-description">{{ card.description }}</p>
+          <div class="record-footer"><span>Owner: {{ card.owner }}</span><span class="status-tag" [class.status-approved]="card.status === 'approved'" [class.status-review]="card.status === 'review'" [class.status-blocked]="card.status === 'blocked'">{{ card.status }}</span></div>
+          <div class="mini-progress"><span [style.width.%]="card.progress"></span></div>
+          <div class="progress-label">{{ card.progress }}% complete</div>
+        </button>
+      } @empty {
+        <p class="empty-state">No records match this category.</p>
+      }
+    </div>
+    <p class="hint">Try filtering to Inventory, switching card density, and selecting a different card. Each card uses the same presentation pattern with different data.</p>
+  </section>
+
+  <section class="section-heading">
+    <p class="eyebrow">SCENARIO 3 · STATE + ACTIONS</p>
+    <h2>Act on the selected component data</h2>
+    <p>A parent screen coordinates a selected record. In larger apps, child components often receive data through inputs and send user intent through outputs.</p>
+  </section>
+  <section class="panel selected-panel">
+    @if (selectedCard; as selected) {
+      <div class="selected-heading">
+        <div><p class="muted-label">SELECTED RECORD · #{{ selected.id }}</p><h3>{{ selected.title }}</h3><p>{{ selected.description }}</p></div>
+        <span class="status-tag large-status" [class.status-approved]="selected.status === 'approved'" [class.status-review]="selected.status === 'review'" [class.status-blocked]="selected.status === 'blocked'">{{ selected.status }}</span>
+      </div>
+      <div class="detail-grid">
+        <div><span>Category</span><strong>{{ selected.category }}</strong></div>
+        <div><span>Owner</span><strong>{{ selected.owner }}</strong></div>
+        <div><span>Progress</span><strong>{{ selected.progress }}%</strong></div>
+        <div><span>Current status</span><strong>{{ selectedStatusLabel }}</strong></div>
+      </div>
+      <div class="action-row">
+        <button type="button" class="primary-button" (click)="addProgressToSelected()">Add 10% progress</button>
+        <button type="button" class="secondary-button" (click)="cycleSelectedStatus()">Move to next demo status</button>
+        <button type="button" class="reset-button" (click)="resetExamples()">Reset examples</button>
+      </div>
+    } @else {
+      <p class="empty-state">Select a record card to see its details.</p>
+    }
+    <div class="event-log" aria-live="polite"><span class="event-dot"></span><div><p class="muted-label">LATEST COMPONENT EVENT</p><strong>{{ lastEvent }}</strong></div></div>
+    @if (actionHistory.length) {
+      <details class="history-details">
+        <summary>Recent actions ({{ actionHistory.length }})</summary>
+        <ol>@for (event of actionHistory; track $index) { <li>{{ event }}</li> }</ol>
+      </details>
+    }
+  </section>
+
+  <section class="mental-model">
+    <h2>Remember the component mental model</h2>
+    <div class="mental-flow">
+      <div><strong>Class</strong><span>Stores state + behavior</span></div>
+      <b aria-hidden="true">→</b>
+      <div><strong>Template</strong><span>Shows data + actions</span></div>
+      <b aria-hidden="true">→</b>
+      <div><strong>Styles</strong><span>Give the feature its visual identity</span></div>
+    </div>
+  </section>
+</main>
